@@ -22,8 +22,14 @@ angular.module('authentication')
         $httpProvider.interceptors.push(interceptor);
     }).run(['$rootScope', '$window', '$timeout', function ($rootScope, $window, $timeout) {
         $rootScope.$on('event:auth-loginRequired', function () {
+            var previousUrl = window.location.href
             $timeout(function () {
-                $window.location = "../home/index.html#/login";
+                if(previousUrl){
+                    $window.location = "../home/index.html#/login?from="+previousUrl;
+                }
+                else{
+                    $window.location = "../home/index.html#/login";
+                }
             });
         });
     }]).service('sessionService', ['$rootScope', '$http', '$q', '$bahmniCookieStore', 'userService', 'offlineService', function ($rootScope, $http, $q, $bahmniCookieStore, userService, offlineService) {
